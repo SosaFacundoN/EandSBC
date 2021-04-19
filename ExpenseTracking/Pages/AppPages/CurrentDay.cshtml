@@ -1,0 +1,253 @@
+﻿@page
+@model ExpenseTracking.Pages.AppPages.CurrentDayModel
+@{
+    ViewData["Title"] = "Today";
+}
+<div class="h1">
+    Today's Operations -
+    <button class="btn btn-primary" data-toggle="modal" data-target="#addOperation">
+        <i class="fa fa-plus"></i>
+        Add Operation
+    </button>
+</div>
+<!--Add Operation modal-->
+<div class="modal fade" id="addOperation" tabindex="-1" role="dialog" aria-labelledby="addOperationLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addOperationLabel">Add Operation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div method="post" name="newOperation">
+
+                    <div class="form-group">
+                        <input type="hidden" asp-for="Operation.Id" />
+                        <input type="hidden" asp-for="Operation.Date" />
+                        <input type="hidden" asp-for="Operation.Branch" />
+                        <input type="hidden" asp-for="Operation.IsService" />
+                        <input type="hidden" asp-for="Operation.TypeOperation" />
+                        <div class="form-row">
+                            <div class="form-group col-md-11">
+                                <label asp-for="Operation.Money">Money:</label>
+                                <div class="col-lg">
+                                    <input type="number" asp-for="Operation.Money" class="form-control" placeholder="0.00" />
+                                    <span class="text-danger" asp-validation-for="Operation.Money"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label asp-for="Operation.Description">Description:</label>
+                                <input asp-for="Operation.Description" class="form-control" placeholder="Golosinas." />
+                                <span class="text-danger" asp-validation-for="Operation.Description"></span>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label asp-for="Operation.Payment">Payment Method: </label>
+                                <select class="form-control" asp-for="Operation.Payment" asp-items="Model.Pay"></select>
+                                <span class="text-danger" asp-validation-for="Operation.Payment"></span>
+                            </div>
+                        </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary">Add</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </div>
+</div>
+<!--Edit Operation modal-->
+<div class="modal fade" id="editOperation" tabindex="-1" role="dialog" aria-labelledby="editOperationLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editOperationLabel">Edit Operation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="post" name="editOperation">
+
+                    <input type="hidden" asp-for="Operation.Id" />
+
+                    <div class="form-group">
+                        <label asp-for="Operation.TypeOperation">Operation type:</label>
+                        <select class="form-control" asp-for="Operation.TypeOperation" asp-items="Model.Type"></select>
+                        <span class="text-danger" asp-validation-for="Operation.TypeOperation"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Operation.Money">Money:</label>
+                        <input type="number" asp-for="Operation.Money" class="form-control" placeholder="0.00" />
+                        <span class="text-danger" asp-validation-for="Operation.Money"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Operation.Description">Description:</label>
+                        <input asp-for="Operation.Description" class="form-control" placeholder="Golosinas." />
+                        <span class="text-danger" asp-validation-for="Operation.Description"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Operation.Payment">Payment: </label>
+                        <select class="form-control" asp-for="Operation.Payment" asp-items="Model.Pay"></select>
+                        <span class="text-danger" asp-validation-for="Operation.Payment"></span>
+                    </div>
+
+                    <input type="hidden" asp-for="Operation.Date" />
+                    <input type="hidden" asp-for="Operation.Branch" />
+                    <input type="hidden" asp-for="Operation.IsService" />
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Search-->
+<form method="get">
+    <div class="form-group">
+        <div class="input-group">
+            <input type="search" class="form-control" asp-for="SearchTerm" />
+            <span class="input-group-btn">
+                <button class="btn btn-outline-dark" />
+                <i class="fa fa-search"></i>
+            </span>
+        </div>
+    </div>
+</form>
+<!--Table-->
+<table id="dtOrderDay" class="table table-striped">
+    <thead>
+        <tr>
+            <th class="th-sm">Time</th>
+            <th class="th-sm">Description</th>
+            <th class="th-sm">Branch</th>
+            <th class="th-sm">Type</th>
+            <th class="th-sm">Method</th>
+            <th class="th-sm">Amount</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var operation in Model.Operations)
+        {
+            <tr>
+                @if (operation.IsService == true)
+                {
+                    continue;
+                }
+                <td>@operation.Date</td>
+                <td>@operation.Description</td>
+                <td>@operation.Branch</td>
+                <td>@operation.TypeOperation</td>
+                <td>@operation.Payment</td>
+                @if (operation.TypeOperation == Core.Operation.OperationType.Expense)
+                {
+                    <td class="text-danger">-$@operation.Money</td>
+                }
+                else
+                {
+                    <td class="text-success">+$@operation.Money</td>
+                }
+                <td>
+                    <a class="btn btn-danger btn-sm" asp-route-operationId="@operation.Id">
+                        <i class="fa fa-trash" style="font-size:18px"></i>
+                    </a>
+                </td>
+                <td>
+                    <a class="btn btn-primary btn-sm" asp-route-operationId="@operation.Id" data-toggle="modal" data-target="#editOperation">
+                        <i class="fa fa-edit" style="font-size:18px"></i>
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            @{decimal current = Model.GetCurrentDayTotal();}
+            <td class="h3">Total:</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            @if (current < 0)
+            {
+                current = current * -1;
+                <td class="text-danger h5">-$@current</td>
+            }
+            else
+            {
+                <td class="text-success h5">+$@current</td>
+            }
+            <td></td>
+            <td></td>
+        </tr>
+    </tfoot>
+
+</table>
+
+<p>Known issues:</p>
+<ul class="list-group-item-warning">
+    <li class="list-group">
+        • The "Add" button doesn't work... Again.
+    </li>
+    <li class="list-group">
+        • The form crashes when trying to enter a blank modal (even though there are validantions to prevent that.)
+    </li>
+    <li class="list-group">
+        • The edit button adds an operation instead of editing the existing one.
+    </li>
+    <li class="list-group">
+        • There's no confirmation window to delete an operation.
+    </li>
+    <li class="list-group">
+        • Deleting an operation and adding a new one makes the form to be populated with the deleted operation's data. I'm going to fix this, but I like how it works like an "undo" button. May implement in the future as a separate feature.
+    </li>
+</ul>
+
+
+
+<!--                        <!-- </div>
+        <div class="form-group">
+            <label asp-for="Operation.TypeOperation">Operation type:</label>
+            <select class="form-control" asp-for="Operation.TypeOperation" asp-items="Model.Type"></select>
+            <span class="text-danger" asp-validation-for="Operation.TypeOperation"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Operation.Money">Money:</label>
+            <input type="number" asp-for="Operation.Money" class="form-control" placeholder="0.00" />
+            <span class="text-danger" asp-validation-for="Operation.Money"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Operation.Description">Description:</label>
+            <input asp-for="Operation.Description" class="form-control" placeholder="Golosinas." />
+            <span class="text-danger" asp-validation-for="Operation.Description"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Operation.Payment">Payment: </label>
+            <select class="form-control" asp-for="Operation.Payment" asp-items="Model.Pay"></select>
+            <span class="text-danger" asp-validation-for="Operation.Payment"></span>
+        </div>
+
+        <input type="hidden" asp-for="Operation.Date" />
+        <input type="hidden" asp-for="Operation.Branch" />
+        <input type="hidden" asp-for="Operation.IsService" />
+
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Add</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>-->
+-->
