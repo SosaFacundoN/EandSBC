@@ -7,7 +7,7 @@ namespace Inventory.Data
 {
     public class InMemoryProviderData
     {
-        public List<Provider> providers;
+        List<Provider> providers;
         public InMemoryProviderData()
         {
             providers = new List<Provider>
