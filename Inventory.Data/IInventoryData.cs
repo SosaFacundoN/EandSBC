@@ -12,7 +12,7 @@ namespace Inventory.Data
         IEnumerable<Product> GetOperationsByQuantity();
         Product GetById(int id);
         Product AddProduct(Product newProduct);
-        Product AddProvider(Product newProvider);
+        Product AddProviderToProduct(Product addedProvider);
         Product UpdateQuantity(int quantity);
         Product DeleteProduct(Product deletedProduct);
 

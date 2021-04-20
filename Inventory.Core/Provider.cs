@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
-/* namespace Inventory.Core
+
+namespace Inventory.Core
 {
     public partial class Provider
     {
         public int Id { get; set; }
+        public string ProviderName { get; set; }
         [Required]
         public int Telephone { get; set; }
         public string Email { get; set; }
@@ -15,7 +15,4 @@ using System.Text;
         public string CompanyName { get; set; }
         public DayOfWeek Day { get; set; }
     }
-
 }
-
-*/
