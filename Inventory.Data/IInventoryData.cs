@@ -10,7 +10,7 @@ namespace Inventory.Data
         IEnumerable<Product> GetOperationsByProducts(string productName);
         IEnumerable<Product> GetOperationsByProvider(string providerName);
         IEnumerable<Product> GetOperationsByQuantity();
-        Product GetById(int id);
+        IEnumerable<Product> GetById();
         Product AddProduct(Product newProduct);
         Product AddProviderToProduct(Product updatedProductProvider);
         Product UpdateQuantity(Product updatedQuantity);

@@ -10,6 +10,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using ExpenseTracking.Data;
 using ExpenseTracking.Core;
+using Inventory.Core;
+using Inventory.Data;
 
 namespace ExpenseTracking
 {
@@ -26,6 +28,8 @@ namespace ExpenseTracking
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IOperationData, InMemoryOperationData>();
+            services.AddSingleton<IInventoryData, InMemoryInventory>();
+            services.AddSingleton<IProviderData, InMemoryProviderData>();
             services.AddRazorPages();
         }
 

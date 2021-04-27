@@ -3,3 +3,27 @@
 @{
 }
 
+<h1>Products</h1>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th class="th-sm">#</th>
+            <th class="th-sm">Product</th>
+            <th class="th-sm">Quantity</th>
+            <th class="th-sm">Provider</th>
+        </tr>
+    </thead>
+    <tbody class="">
+        @foreach (var product in Model.Products)
+        {
+            <tr>
+                <td scope="row">@product.Id</td>
+                <td>@product.Name</td>
+                <td>@product.Quantity</td>
+                <td>@product.ProviderId</td>
+            </tr>
+        }
+    </tbody>
+</table>
+

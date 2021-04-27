@@ -55,9 +55,11 @@ namespace Inventory.Data
 
         }
 
-        public Product GetById(int id)
+        public IEnumerable<Product> GetById()
         {
-            return products.SingleOrDefault(p => p.Id == id);
+            return from p in products
+                   orderby p.Id ascending
+                   select p;
         }
 
         public IEnumerable<Product> GetOperationsByProducts(string productName)
