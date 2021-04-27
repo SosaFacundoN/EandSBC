@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Inventory.Core;
 
 namespace Inventory.Data
 {
-    public class InMemoryProviderData
+    public class InMemoryProviderData : IProviderData
     {
         List<Provider> providers;
         public InMemoryProviderData()
@@ -19,6 +20,45 @@ namespace Inventory.Data
                 new Provider { Id = 5, ProviderName = "Damián Alegre", CompanyName = "Arcor", Email = "DamianAlegre@Arcor.com.ar", Day = DayOfWeek.Tuesday, Telephone = 1170677304 },
                 new Provider { Id = 6, ProviderName = "Tiziana Derian", CompanyName = "Nestlé", Email = "TizianaNestle@gmail.com", Day = DayOfWeek.Friday, Telephone = 1143060324 }
             };
+        }
+
+        public Provider AddProvider(Provider newProvider)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Provider DeleteProduct(Provider deletedProvider)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Provider GetById(int id)
+        {
+            return providers.SingleOrDefault(p => p.Id == id);
+        }
+
+        public IEnumerable<Provider> GetProviderByCompany(string company)
+        {
+            return from p in providers
+                   where string.IsNullOrEmpty(company) || p.CompanyName.StartsWith(company)
+                   orderby p.CompanyName
+                   select p;
+        }
+
+        public IEnumerable<Provider> GetProviderByName(string name)
+        {
+            return from p in providers
+                   where string.IsNullOrEmpty(name) || p.ProviderName.StartsWith(name)
+                   orderby p.ProviderName
+                   select p;
+        }
+
+        public IEnumerable<Provider> GetProviderByProducts(string product)
+        {
+            return from p in providers
+                   where string.IsNullOrEmpty(product) || p.ProviderName.StartsWith(product)
+                   orderby p.ProviderName
+                   select p;
         }
     }
 }

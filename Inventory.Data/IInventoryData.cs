@@ -7,14 +7,15 @@ namespace Inventory.Data
 {
     public interface IInventoryData
     {
-        IEnumerable<Product> GetOperationsByProducts(string product);
-        IEnumerable<Product> GetOperationsByProvider(string provider);
+        IEnumerable<Product> GetOperationsByProducts(string productName);
+        IEnumerable<Product> GetOperationsByProvider(string providerName);
         IEnumerable<Product> GetOperationsByQuantity();
         Product GetById(int id);
         Product AddProduct(Product newProduct);
-        Product AddProviderToProduct(Product addedProvider);
-        Product UpdateQuantity(int quantity);
+        Product AddProviderToProduct(Product updatedProductProvider);
+        Product UpdateQuantity(Product updatedQuantity);
         Product DeleteProduct(Product deletedProduct);
+        int Commit();
 
     }
 }

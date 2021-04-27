@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Inventory.Core;
 using Inventory.Data;
@@ -28,5 +30,70 @@ namespace Inventory.Data
             };
         }
 
+        public Product AddProduct(Product newProduct)
+        {
+            products.Add(newProduct);
+            newProduct.Id = products.Max(p => p.Id) + 1;
+            return newProduct;
+        }
+
+        public Product AddProviderToProduct(Product updatedProductProvider)
+        {
+            var provider = products.SingleOrDefault(p => p.Id == updatedProductProvider.Id);
+            if (provider != null)
+            {
+                provider.ProviderId = updatedProductProvider.Id;
+            }
+            return updatedProductProvider;
+        }
+
+        public Product DeleteProduct(Product deletedProduct)
+        {
+            var product = products.SingleOrDefault(p => p.Id == deletedProduct.Id);
+            products.Remove(product);
+            return deletedProduct;
+
+        }
+
+        public Product GetById(int id)
+        {
+            return products.SingleOrDefault(p => p.Id == id);
+        }
+
+        public IEnumerable<Product> GetOperationsByProducts(string productName)
+        {
+            return from p in products
+                   where string.IsNullOrEmpty(productName) || p.Name.StartsWith(productName)
+                   orderby p.Name
+                   select p;
+        }
+
+        public IEnumerable<Product> GetOperationsByProvider(string providerName)
+        {
+            return from p in products
+                   where string.IsNullOrEmpty(providerName) || p.Name.StartsWith(providerName)
+                   orderby p.Name
+                   select p;
+        }
+
+        public IEnumerable<Product> GetOperationsByQuantity()
+        {
+            List<Product> SortedList = products.OrderByDescending(p => p.Quantity).ToList();
+            return SortedList;
+        }
+
+        public Product UpdateQuantity(Product updatedQuantity)
+        {
+            var provider = products.SingleOrDefault(p => p.Quantity == updatedQuantity.Quantity);
+            if (provider != null)
+            {
+                provider.Quantity = updatedQuantity.Quantity;
+            }
+            return updatedQuantity;
+        }
+        public int Commit()
+        {
+            return 0;
+        }
     }
 }
