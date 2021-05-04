@@ -26,8 +26,10 @@ namespace ExpenseTracking.Pages.AppPages
         [BindProperty(SupportsGet = true)]
         public string SearchTerm { get; set; }
         public IEnumerable<Product> Products { get; set;}
+        public IEnumerable<Provider> Providers { get; set; }
         [BindProperty]
         public Product Product { get; set; }
+        public Provider Provider { get; set; }
 
 
         public void OnGet()
